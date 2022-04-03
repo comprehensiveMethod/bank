@@ -4,7 +4,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "clients")
-public class User {
+public class UserAcc {
 
     @Id
     @Column
@@ -16,6 +16,8 @@ public class User {
     private String password;
     @Column
     private Long balance;
+    @Column
+    private String userRole;
 
     public String getEmail() {
         return email;
@@ -25,6 +27,13 @@ public class User {
         this.email = email;
     }
 
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
+    }
 
     public String getPassword() {
         return password;

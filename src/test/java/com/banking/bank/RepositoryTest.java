@@ -1,7 +1,7 @@
 package com.banking.bank;
 import static org.assertj.core.api.Assertions.assertThat;
 
-import com.banking.bank.models.User;
+import com.banking.bank.models.UserAcc;
 import com.banking.bank.repo.ClientRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,15 +22,15 @@ public class RepositoryTest {
 
     @Test
     public void createUser(){
-        User user = new User();
-        user.setEmail("smth@Example.com");
-        user.setPassword("123456");
-        user.setBalance(0L);
+        UserAcc userAcc = new UserAcc();
+        userAcc.setEmail("smth@Example.com");
+        userAcc.setPassword("123456");
+        userAcc.setBalance(0L);
 
-        User savedUser =clientRepository.save(user);
+        UserAcc savedUserAcc =clientRepository.save(userAcc);
 
-        User existUser = testEntityManager.find(User.class, savedUser.getId());
+        UserAcc existUserAcc = testEntityManager.find(UserAcc.class, savedUserAcc.getId());
 
-        assertThat(existUser.getEmail()).isEqualTo(user.getEmail());
+        assertThat(existUserAcc.getEmail()).isEqualTo(userAcc.getEmail());
     }
 }
