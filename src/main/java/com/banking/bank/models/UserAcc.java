@@ -16,8 +16,6 @@ public class UserAcc {
     private String password;
     @Column
     private Long balance;
-    @Column
-    private String userRole;
 
     public String getEmail() {
         return email;
@@ -27,13 +25,7 @@ public class UserAcc {
         this.email = email;
     }
 
-    public String getUserRole() {
-        return userRole;
-    }
 
-    public void setUserRole(String userRole) {
-        this.userRole = userRole;
-    }
 
     public String getPassword() {
         return password;
