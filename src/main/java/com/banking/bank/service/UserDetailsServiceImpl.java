@@ -25,12 +25,18 @@ public class UserDetailsServiceImpl {
             UserAcc trueUser = userAcc.get();
             trueUser.setBalance(trueUser.getBalance()+sum);
             userAccRepository.save(trueUser);
-        }catch (Exception e) {return;}
+        }catch (Exception e) {
+            return;
+        }
 
     }
     public boolean checkUser(UserAcc userAcc){
         if(userAccRepository.existsByEmailAndPassword(userAcc.getEmail(),userAcc.getPassword()) == true) return true;
         else return false;
+    }
+    public UserAcc find(UserAcc userAcc){
+        Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(userAcc.getEmail());
+        return userAcc1.get();
     }
     public void transaction(String email1,String email2, Long sum){
         Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(email1);
