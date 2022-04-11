@@ -24,7 +24,7 @@ public class BlockController {
     @PostMapping("/register")
     public String reg(@ModelAttribute("userForm") UserAcc userForm, HttpSession session){
         userService.createUser(userForm);
-        UserAcc user = userService.find(userForm);
+        UserAcc user = userService.find(userForm.getEmail());
         session.setAttribute("infoUser", user);
         return "registerPage";
     }
@@ -38,7 +38,7 @@ public class BlockController {
     @PostMapping("/login")
     public String signCheck(@ModelAttribute("userForm") UserAcc userForm, HttpSession session){
         if(userService.checkUser(userForm) == true) {
-            UserAcc user = userService.find(userForm);
+            UserAcc user = userService.find(userForm.getEmail());
             session.setAttribute("infoUser", user);
             return "redirect:/";
         }else return "redirect:/login";

@@ -1,6 +1,8 @@
 package com.banking.bank.controllers;
 
+import com.banking.bank.models.Deposit;
 import com.banking.bank.models.UserAcc;
+import com.banking.bank.service.DepositService;
 import com.banking.bank.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import javax.servlet.http.HttpSession;
 public class MainController {
     @Autowired
     UserDetailsServiceImpl userService;
+    @Autowired
+    DepositService depositService;
     @GetMapping("/")
     public String bank(Model model, HttpSession session){
         model.addAttribute("title", "Банк");
@@ -39,8 +43,7 @@ public class MainController {
             return "bank";
         }
         else{
-
-            model.addAttribute("sum", new String());
+            model.addAttribute("deposit", new Deposit());
             UserAcc finalUserAcc = (UserAcc)session.getAttribute("infoUser");
             model.addAttribute("email", finalUserAcc.getEmail() );
             model.addAttribute("balance", finalUserAcc.getBalance());
@@ -48,20 +51,20 @@ public class MainController {
         }
     }
     @PostMapping("/deposit")
-    public String depositValue(@ModelAttribute("sum") String sum, HttpSession session){
-        if(session.getAttribute("infoUser") == null) {
-            return "bank";
+    public String depositValue(@ModelAttribute("deposit") Deposit deposit, HttpSession session, Model model){
+        try {
+            System.out.println("sum: "+deposit.getDepositValue());
+            UserAcc userAcc = (UserAcc)session.getAttribute("infoUser");
+            System.out.println(userAcc.getEmail());
+            userService.deposit(userAcc.getEmail(),deposit.getDepositValue());
+            session.setAttribute("infoUser", userService.find(userAcc.getEmail()));
+            depositService.createDepositCheck(userAcc,deposit.getDepositValue());
+            return "redirect:/";
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return "ErrorPage";
         }
-        else{
-            try {
-                Long value = Long.parseLong(sum);
-                UserAcc userAcc = (UserAcc) session.getAttribute("infouser");
-                userService.deposit(userAcc.getEmail(),value);
-                return "redirect:/";
-            }catch (Exception e){
-                return "ErrorPage";
-            }
-        }
+
     }
     @GetMapping("/transfer")
     public String transfer(Model model, HttpSession session){

@@ -20,10 +20,12 @@ public class UserDetailsServiceImpl {
         userAccRepository.save(userAcc);
     }
     public void deposit(String email, Long sum){
-        Optional<UserAcc> userAcc = userAccRepository.findByEmail(email);
+
         try {
-            UserAcc trueUser = userAcc.get();
-            trueUser.setBalance(trueUser.getBalance()+sum);
+            UserAcc trueUser = userAccRepository.findByEmail(email).get();
+            System.out.println("deposit: "+trueUser.getId()+" "+ trueUser.getEmail()+" "+trueUser.getBalance()+" for sum: "+sum);
+            Long startSum = trueUser.getBalance();
+            trueUser.setBalance(startSum+sum);
             userAccRepository.save(trueUser);
         }catch (Exception e) {
             return;
@@ -34,8 +36,9 @@ public class UserDetailsServiceImpl {
         if(userAccRepository.existsByEmailAndPassword(userAcc.getEmail(),userAcc.getPassword()) == true) return true;
         else return false;
     }
-    public UserAcc find(UserAcc userAcc){
-        Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(userAcc.getEmail());
+    public UserAcc find(String email){
+        Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(email);
+        System.out.println("find: "+userAcc1.get().getId()+" "+ userAcc1.get().getEmail()+" "+userAcc1.get().getBalance());
         return userAcc1.get();
     }
     public void transaction(String email1,String email2, Long sum){
