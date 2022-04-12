@@ -42,11 +42,11 @@ public class UserDetailsServiceImpl {
         return userAcc1.get();
     }
     public void transaction(String email1,String email2, Long sum){
-        Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(email1);
-        Optional<UserAcc> userAcc2 = userAccRepository.findByEmail(email1);
         try {
-            UserAcc transactionHolder = userAcc1.get();
-            UserAcc transactionGetter = userAcc2.get();
+            UserAcc transactionHolder = userAccRepository.findByEmail(email1).get();
+            System.out.println("Transaction holder: "+ transactionHolder.getEmail());
+            UserAcc transactionGetter = userAccRepository.findByEmail(email2).get();
+            System.out.println("Transaction getter: "+ transactionGetter.getEmail());
             if(transactionHolder.getBalance()<sum) {
                 throw new Exception("Not enough money to transaction from "+transactionHolder.getEmail()+" to " + transactionGetter.getEmail());
             }else{

@@ -23,10 +23,14 @@ public class BlockController {
     }
     @PostMapping("/register")
     public String reg(@ModelAttribute("userForm") UserAcc userForm, HttpSession session){
-        userService.createUser(userForm);
-        UserAcc user = userService.find(userForm.getEmail());
-        session.setAttribute("infoUser", user);
-        return "registerPage";
+        try {
+            userService.createUser(userForm);
+            UserAcc user = userService.find(userForm.getEmail());
+            session.setAttribute("infoUser", user);
+            return "registerPage";
+        }catch (Exception e){
+            return "ErrorPage";
+        }
     }
     @GetMapping("/login")
     public String signIn(Model model, HttpSession session){

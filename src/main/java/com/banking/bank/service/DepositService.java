@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 public class DepositService {
     @Autowired
     DepositRepository depositRepository;
-    @Autowired
-    UserDetailsServiceImpl userDetailsService;
     public void createDepositCheck(UserAcc userAcc, Long sum){
         Deposit deposit = new Deposit();
         deposit.setDepositValue(sum);

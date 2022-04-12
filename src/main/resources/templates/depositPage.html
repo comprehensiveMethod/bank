@@ -20,7 +20,7 @@
 <form method="POST" class="form-signin" th:object="${deposit}" th:action="@{/deposit}">
     <h2 class="form-signin-heading">Write a sum to deposit</h2>
     <div class="form-group">
-        <input type="text" th:field="*{depositValue}" class="form-control" placeholder="Сумма"/>
+        <input type="text" th:field="*{depositValue}" class="form-control" placeholder="Сумма" required/>
     </div>
 
 

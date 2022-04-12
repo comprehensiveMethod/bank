@@ -1,8 +1,10 @@
 package com.banking.bank.controllers;
 
 import com.banking.bank.models.Deposit;
+import com.banking.bank.models.Transfer;
 import com.banking.bank.models.UserAcc;
 import com.banking.bank.service.DepositService;
+import com.banking.bank.service.TransferService;
 import com.banking.bank.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +21,8 @@ public class MainController {
     UserDetailsServiceImpl userService;
     @Autowired
     DepositService depositService;
+    @Autowired
+    TransferService transferService;
     @GetMapping("/")
     public String bank(Model model, HttpSession session){
         model.addAttribute("title", "Банк");
@@ -74,10 +78,28 @@ public class MainController {
         }
         else{
             UserAcc finalUserAcc = (UserAcc)session.getAttribute("infoUser");
+            model.addAttribute("transfer", new Transfer());
             model.addAttribute("email", finalUserAcc.getEmail() );
             model.addAttribute("balance", finalUserAcc.getBalance());
             return "transferPage";
         }
     }
+    @PostMapping("/transfer")
+    public String transferValue(@ModelAttribute("transfer") Transfer transfer, HttpSession session){
+        try {
+            UserAcc userAcc = (UserAcc)session.getAttribute("infoUser");
+            userService.transaction(userAcc.getEmail(), transfer.getReceiverEmail(), transfer.getTransferAmount());
+            if(userService.checkUser(userAcc) == false){
+                throw new Exception("No user found");
+            }
+            transfer.setSenderEmail(userAcc.getEmail());
+            transferService.createTransferCheck(transfer);
+            session.setAttribute("infoUser", userService.find(userAcc.getEmail()));
+            return "redirect:/";
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+            return "ErrorPage";
+        }
 
+    }
 }
