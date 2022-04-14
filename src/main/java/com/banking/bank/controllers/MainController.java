@@ -66,6 +66,7 @@ public class MainController {
             return "redirect:/";
         }catch (Exception e){
             System.out.println(e.getMessage());
+            model.addAttribute("exception", e.getMessage());
             return "ErrorPage";
         }
 
@@ -85,19 +86,22 @@ public class MainController {
         }
     }
     @PostMapping("/transfer")
-    public String transferValue(@ModelAttribute("transfer") Transfer transfer, HttpSession session){
+    public String transferValue(@ModelAttribute("transfer") Transfer transfer, HttpSession session, Model model){
         try {
             UserAcc userAcc = (UserAcc)session.getAttribute("infoUser");
             userService.transaction(userAcc.getEmail(), transfer.getReceiverEmail(), transfer.getTransferAmount());
             if(userService.checkUser(userAcc) == false){
                 throw new Exception("No user found");
             }
-            transfer.setSenderEmail(userAcc.getEmail());
-            transferService.createTransferCheck(transfer);
-            session.setAttribute("infoUser", userService.find(userAcc.getEmail()));
-            return "redirect:/";
+            else {
+                transfer.setSenderEmail(userAcc.getEmail());
+                transferService.createTransferCheck(transfer);
+                session.setAttribute("infoUser", userService.find(userAcc.getEmail()));
+                return "redirect:/";
+            }
         }catch (Exception e){
             System.out.println(e.getMessage());
+            model.addAttribute("exception", e.getMessage());
             return "ErrorPage";
         }
 
