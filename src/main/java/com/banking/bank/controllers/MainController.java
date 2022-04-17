@@ -3,6 +3,7 @@ package com.banking.bank.controllers;
 import com.banking.bank.models.Deposit;
 import com.banking.bank.models.Transfer;
 import com.banking.bank.models.UserAcc;
+import com.banking.bank.repository.UserAccRepository;
 import com.banking.bank.service.DepositService;
 import com.banking.bank.service.TransferService;
 import com.banking.bank.service.UserDetailsServiceImpl;
@@ -17,6 +18,8 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
+    @Autowired
+    UserAccRepository userAccRepository;
     @Autowired
     UserDetailsServiceImpl userService;
     @Autowired
@@ -89,11 +92,14 @@ public class MainController {
     public String transferValue(@ModelAttribute("transfer") Transfer transfer, HttpSession session, Model model){
         try {
             UserAcc userAcc = (UserAcc)session.getAttribute("infoUser");
-            userService.transaction(userAcc.getEmail(), transfer.getReceiverEmail(), transfer.getTransferAmount());
-            if(userService.checkUser(userAcc) == false){
+            if(userAcc.getEmail() == transfer.getReceiverEmail()){
+                throw new Exception("You tried to transfer money to yourself?");
+            }
+            if(userAccRepository.existsByEmail(transfer.getReceiverEmail()) == false){
                 throw new Exception("No user found");
             }
             else {
+                userService.transaction(userAcc.getEmail(), transfer.getReceiverEmail(), transfer.getTransferAmount());
                 transfer.setSenderEmail(userAcc.getEmail());
                 transferService.createTransferCheck(transfer);
                 session.setAttribute("infoUser", userService.find(userAcc.getEmail()));
