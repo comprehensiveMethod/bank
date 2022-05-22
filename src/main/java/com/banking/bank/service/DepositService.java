@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 public class DepositService {
     @Autowired
     DepositRepository depositRepository;
-    public void createDepositCheck(UserAcc userAcc, Long sum){
+    public void createDepositCheck(UserAcc userAcc, Long sum){ //создание(не проверка) чека(скорее выписки) о пополнении
         Deposit deposit = new Deposit();
         deposit.setDepositValue(sum);
         deposit.setEmail(userAcc.getEmail());

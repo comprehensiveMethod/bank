@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 
 @Controller
 public class MainController {
+    //Автопривязки
     @Autowired
     UserAccRepository userAccRepository;
     @Autowired
@@ -26,7 +27,7 @@ public class MainController {
     DepositService depositService;
     @Autowired
     TransferService transferService;
-    @GetMapping("/")
+    @GetMapping("/") //Основная страница(проверка на сессию)
     public String bank(Model model, HttpSession session){
         model.addAttribute("title", "Банк");
         if(session.getAttribute("infoUser") == null) {
@@ -39,11 +40,11 @@ public class MainController {
             return "bankLogged";
         }
     }
-    @GetMapping("/support")
+    @GetMapping("/support")//страница саппорта
     public String support(){
         return "supportPage";
     }
-    @GetMapping("/deposit")
+    @GetMapping("/deposit") //гетмап депозита
     public String deposit(Model model, HttpSession session){
         if(session.getAttribute("infoUser") == null) {
             model.addAttribute("title", "Банк");
@@ -57,7 +58,7 @@ public class MainController {
             return "depositPage";
         }
     }
-    @PostMapping("/deposit")
+    @PostMapping("/deposit")//постмап депозита, выполняется пополнение счёта акка
     public String depositValue(@ModelAttribute("deposit") Deposit deposit, HttpSession session, Model model){
         try {
             System.out.println("sum: "+deposit.getDepositValue());
@@ -74,7 +75,7 @@ public class MainController {
         }
 
     }
-    @GetMapping("/transfer")
+    @GetMapping("/transfer") //гетмап трансфера
     public String transfer(Model model, HttpSession session){
         if(session.getAttribute("infoUser") == null) {
             model.addAttribute("title", "Банк");
@@ -88,7 +89,7 @@ public class MainController {
             return "transferPage";
         }
     }
-    @PostMapping("/transfer")
+    @PostMapping("/transfer") //постмап трасфера, перевод от 1 пользователя к другому
     public String transferValue(@ModelAttribute("transfer") Transfer transfer, HttpSession session, Model model){
         try {
             UserAcc userAcc = (UserAcc)session.getAttribute("infoUser");

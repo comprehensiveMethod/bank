@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 public class TransferService {
     @Autowired
     TransferRepository transferRepository;
-    public void createTransferCheck(Transfer transfer){
+    public void createTransferCheck(Transfer transfer){ //создание(не проверка) чека о переводе средств
         transferRepository.save(transfer);
     }
 }

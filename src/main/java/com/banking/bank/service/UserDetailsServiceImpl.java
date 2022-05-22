@@ -15,11 +15,11 @@ public class UserDetailsServiceImpl {
     @Autowired
     UserAccRepository userAccRepository;
 
-    public void createUser(UserAcc userAcc){
+    public void createUser(UserAcc userAcc){ //создание аккаунта
         userAcc.setBalance(100L);
         userAccRepository.save(userAcc);
     }
-    public void deposit(String email, Long sum){
+    public void deposit(String email, Long sum){ //пополнение баланса
 
         try {
             UserAcc trueUser = userAccRepository.findByEmail(email).get();
@@ -32,16 +32,16 @@ public class UserDetailsServiceImpl {
         }
 
     }
-    public boolean checkUser(UserAcc userAcc){
+    public boolean checkUser(UserAcc userAcc){ //проверка на существование юзера
         if(userAccRepository.existsByEmailAndPassword(userAcc.getEmail(),userAcc.getPassword()) == true) return true;
         else return false;
     }
-    public UserAcc find(String email){
+    public UserAcc find(String email){//поиск юзера
         Optional<UserAcc> userAcc1 = userAccRepository.findByEmail(email);
         System.out.println("find: "+userAcc1.get().getId()+" "+ userAcc1.get().getEmail()+" "+userAcc1.get().getBalance());
         return userAcc1.get();
     }
-    public void transaction(String email1,String email2, Long sum){
+    public void transaction(String email1,String email2, Long sum){ //выполнение транзакции
         try {
             UserAcc transactionHolder = userAccRepository.findByEmail(email1).get();
             System.out.println("Transaction holder: "+ transactionHolder.getEmail());
