@@ -1,5 +1,9 @@
 # Simple bank application
 ---
+
+This application created as my first Spring project to learn how to works with Web,MVC and Databases, also with sessions
+
+---
 ### Functions:
 
   1.Registration/login
